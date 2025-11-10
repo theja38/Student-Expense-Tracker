@@ -1,0 +1,4 @@
+import React from 'react'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+const monthKey = (iso) => iso ? iso.slice(0,7) : ''
+export default function BarChartComponent({data=[]}){ const grouped = {}; (data||[]).forEach(t=>{ const m = monthKey(t.date); if(!grouped[m]) grouped[m] = { month: m, income:0, expense:0 }; grouped[m][t.type] += Number(t.amount||0) }); const chartData = Object.keys(grouped).sort().map(k=>grouped[k]); if(chartData.length===0) return <div style={{padding:20,color:'#6b7280'}}>No monthly data yet</div>; return (<div style={{height:220}}><ResponsiveContainer><BarChart data={chartData}><XAxis dataKey='month' /><YAxis /><Tooltip /><Legend /><Bar dataKey='income' /><Bar dataKey='expense' /></BarChart></ResponsiveContainer></div>) }

@@ -1,0 +1,8 @@
+import React, { useState, useEffect } from 'react'
+import categories from '../utils/categories'
+export default function AddTransactionModal({open,onClose,onSave}){ const [form,setForm]=useState({title:'', amount:'', category:categories[0], type:'expense', date:new Date().toISOString().slice(0,10)})
+  useEffect(()=>{ if(open) setForm(f=>({...f, date:new Date().toISOString().slice(0,10)})) },[open])
+  if(!open) return null
+  const change = (e) => setForm({...form, [e.target.name]: e.target.value })
+  const submit = () => { if(!form.title || !form.amount){ alert('Please enter title and amount'); return } onSave({...form, amount: Number(form.amount)}) }
+  return (<div className='modal-backdrop'><div className='modal'><h3>Add Transaction</h3><input name='title' placeholder='Title' className='input' value={form.title} onChange={change} /><input name='amount' placeholder='Amount' type='number' className='input' value={form.amount} onChange={change} /><div style={{display:'flex',gap:8,marginTop:8}}><select name='category' value={form.category} onChange={change} className='input' style={{flex:1}}>{categories.map(c=> <option key={c} value={c}>{c}</option>)}</select><select name='type' value={form.type} onChange={change} className='input' style={{width:120}}><option value='income'>Income</option><option value='expense'>Expense</option></select></div><input name='date' type='date' className='input' value={form.date} onChange={change} /><div style={{display:'flex',gap:8,marginTop:12}}><button className='btn' onClick={submit}>Save</button><button className='btn' onClick={onClose} style={{background:'#e5e7eb',color:'#111'}}>Cancel</button></div></div></div>) }
